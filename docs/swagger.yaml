@@ -53,6 +53,32 @@ paths:
       summary: Генерация токенов для пользователя
       tags:
       - Auth
+  /auth/get_id:
+    get:
+      description: Извлекает user_id из контекста запроса, который был добавлен при
+        проверке токена.
+      parameters:
+      - description: Bearer <access_token>
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Возвращает user_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Получение user_id из access токена
+      tags:
+      - Auth
   /auth/logout:
     post:
       consumes:
@@ -122,26 +148,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.ErrorResponse'
       summary: Обновление токенов для пользователя
-      tags:
-      - Auth
-  /auth/user-id:
-    get:
-      description: Извлекает user_id из контекста запроса, который был добавлен при
-        проверке токена.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Возвращает user_id
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Ошибка сервера
-          schema:
-            $ref: '#/definitions/utils.ErrorResponse'
-      summary: Получение user_id из access токена
       tags:
       - Auth
 swagger: "2.0"

@@ -24,7 +24,7 @@ func main() {
 
 	r := routes.RegisterRout()
 
-	if err := http.ListenAndServe(":"+config.Cfg.ServerPort, r); err == nil {
+	if err := http.ListenAndServe("0.0.0.0:"+config.Cfg.ServerPort, r); err == nil {
 		log.Printf("\nСервер запущен. Порт: %s", config.Cfg.ServerPort)
 	} else {
 		log.Fatalf("Ошибка запуска сервера: %v", err)

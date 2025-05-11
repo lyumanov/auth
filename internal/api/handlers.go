@@ -167,9 +167,10 @@ func RefreshTokensHandler(w http.ResponseWriter, r *http.Request) {
 // @Description Извлекает user_id из контекста запроса, который был добавлен при проверке токена.
 // @Tags Auth
 // @Produce json
+// @Param Authorization header string true "Bearer <access_token>"
 // @Success 200 {object} map[string]string "Возвращает user_id"
 // @Failure 500 {object} utils.ErrorResponse "Ошибка сервера"
-// @Router /auth/user-id [get]
+// @Router /auth/get_id [get]
 func GetUserIDHandler(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("user_id")
 	if userID == nil {
