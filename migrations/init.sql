@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users_tokens (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
+    token_id UUID NOT NULL,
     token_hash TEXT NOT NULL,
     user_agent TEXT NOT NULL,
     ip_address TEXT NOT NULL,

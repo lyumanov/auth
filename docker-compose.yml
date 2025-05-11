@@ -31,7 +31,7 @@ services:
         echo waiting for database;
         sleep 2;
       done;
-      psql -h db -U ${DB_USER} -d ${DB_NAME} -f /app/migrations/init.sql;
+      PGPASSWORD=${DB_PASSWORD} psql -h db -U ${DB_USER} -d ${DB_NAME} -f /app/migrations/init.sql;
       go run cmd/main.go"
 
 volumes:

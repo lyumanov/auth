@@ -1,16 +1,21 @@
+// @title Auth API
+// @version 1.0
+// @description Сервис аутентификации с JWT токенами.
+// @host localhost:8000
+// @BasePath /api
 package main
 
 import (
 	"auth/internal/config"
 	"auth/internal/database"
 	"auth/internal/routes"
+
 	"log"
 	"net/http"
 )
 
 func main() {
 	config.Load()
-	log.Println(config.Cfg.DBPassword)
 
 	if err := database.InitDB(); err != nil {
 		log.Fatalf("Ошибка подключения к бд: %v", err)
