@@ -1,0 +1,147 @@
+basePath: /api
+definitions:
+  api.TokensResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  utils.ErrorResponse:
+    properties:
+      error:
+        properties:
+          code:
+            type: integer
+          message:
+            type: string
+        type: object
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: Сервис аутентификации с JWT токенами.
+  title: Auth API
+  version: "1.0"
+paths:
+  /auth/{user_id}:
+    post:
+      consumes:
+      - application/json
+      description: Генерирует пару токенов (access и refresh) по ID пользователя
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Токены успешно сгенерированы
+          schema:
+            $ref: '#/definitions/api.TokensResponse'
+        "400":
+          description: Ошибка при создании токенов
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Генерация токенов для пользователя
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Деактивирует текущий токен (лог-аут) с помощью токена из заголовка
+        Authorization.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout успешен
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Ошибка при извлечении токена
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "401":
+          description: Неавторизованный доступ или ошибка токена
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Выход пользователя из системы
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Обновляет пару токенов (access и refresh) на основе переданных
+        токенов.
+      parameters:
+      - description: Тело запроса с токенами
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/api.TokensResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Токены успешно обновлены
+          schema:
+            $ref: '#/definitions/api.TokensResponse'
+        "400":
+          description: Ошибка при обработке токенов
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "401":
+          description: Неавторизованный доступ или ошибка токена
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Обновление токенов для пользователя
+      tags:
+      - Auth
+  /auth/user-id:
+    get:
+      description: Извлекает user_id из контекста запроса, который был добавлен при
+        проверке токена.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Возвращает user_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Получение user_id из access токена
+      tags:
+      - Auth
+swagger: "2.0"
